@@ -1,0 +1,40 @@
+<div class="end">
+  <button mat-raised-button (click)="cancel()">Cancel quiz</button>
+</div>
+
+<h1>{{ currentQuiz.categoryName }}</h1>
+
+<ng-container *ngIf="currentQuiz.questions.length > 0">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{ currentQuiz.questions[currentQuestionIndex].question }}</mat-card-title>
+    </mat-card-header>
+    <form [formGroup]="quizForm">
+      <mat-radio-group formControlName="answer">
+        <mat-radio-button value="True">Yes</mat-radio-button>
+        <mat-radio-button value="False">No</mat-radio-button>
+      </mat-radio-group>
+      <mat-card-actions class="end">
+
+
+        <ng-container *ngIf="isLastQuestion">
+          <button mat-button color="primary" (click)="finishQuiz()" [disabled]="quizForm.invalid">
+            Finish
+          </button>
+        </ng-container>
+
+
+        <ng-container *ngIf="!isLastQuestion">
+          <button mat-button color="primary" (click)="nextQuestion()" [disabled]="quizForm.invalid">
+            Next
+          </button>
+        </ng-container>
+
+
+        <!-- <button mat-button color="primary" (click)="nextQuestion()" [disabled]="quizForm.invalid">
+          {{ isLastQuestion() ? 'Finish' : 'Next' }}
+        </button> -->
+      </mat-card-actions>
+    </form>
+  </mat-card>
+</ng-container>
