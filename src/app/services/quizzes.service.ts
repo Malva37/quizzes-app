@@ -32,9 +32,17 @@ export class QuizzesService {
   }
 
   getOneQuiz() {
+    const headerDict = {
+      "Accept": "application/json;charset=RFC 3986",
+      //  "Accept-Charset":"charset=utf-8"
+    }
+
+    const requestOptions = {
+      headers: new HttpHeaders(headerDict),
+    };
     const currentQuiz = this.cacheService.getCategory();
 
     return this.http.get<{ results: QuestionResponse[] }>(
-      `${BASE_URL}/api.php?amount=10&category=${currentQuiz.id}&type=boolean`);
+      `${BASE_URL}/api.php?amount=10&category=${currentQuiz.id}&type=boolean`, requestOptions);
   }
 }

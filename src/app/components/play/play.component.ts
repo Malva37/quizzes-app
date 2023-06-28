@@ -1,5 +1,5 @@
 import { QuestionResponse } from './../../types/QuestionResponse';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CategoryStoreService } from 'src/app/services/quiz-store.service';
 import { QuizzesService } from 'src/app/services/quizzes.service';
@@ -37,22 +37,32 @@ export class PlayComponent implements OnInit {
   };
 
   constructor(
-    // public headerService: HeaderService,
+    private cdr: ChangeDetectorRef,
+    public headerService: HeaderService,
     public quizzesFromServerService: QuizzesService,
     public categoryService: CategoryStoreService,
     public statisticService: UserStatisticService,
     private router: Router,
     private fb: FormBuilder
-  ) {}
+  ) {
+  //   this.quizForm = this.fb.group({
+  //   answer: [null], // Default value is null
+  // });
+}
 
   ngOnInit(): void {
-    // this.headerService.setHeaderEnabled(false);
-    this.startTimer();
     this.quizForm = this.fb.group({
       answer: [null, Validators.required],
+      // answer: new FormControl('')
     });
     this.fillCurrentQuiz();
     this.getCurrentQuiz();
+    this.startTimer();
+
+    setTimeout(() => {
+      this.headerService.setHeaderEnabled(false);
+      this.cdr.detectChanges();
+    }, 0);
   }
 
   startTimer() {
@@ -64,7 +74,6 @@ export class PlayComponent implements OnInit {
 
   fillCurrentQuiz() {
     const quizFromStorage = this.categoryService.getCategory();
-    console.log(quizFromStorage);
 
     if (quizFromStorage) {
       this.currentQuiz.categoryId = quizFromStorage.id;
@@ -96,7 +105,7 @@ export class PlayComponent implements OnInit {
       timeOfAnswering: 0,
     };
     clearInterval(this.timerId);
-    // this.headerService.setHeaderEnabled(true);
+    this.headerService.setHeaderEnabled(true);
     this.router.navigateByUrl('/home');
   }
 
@@ -123,7 +132,7 @@ export class PlayComponent implements OnInit {
       this.calculateResults();
       this.statisticService.cacheStatisticTotal(this.userResult);
       this.statisticService.cacheStatisticLast(this.userResult);
-      // this.headerService.setHeaderEnabled(true);
+      this.headerService.setHeaderEnabled(true);
       this.router.navigateByUrl('/finish');
     // }
     this.categoryService.clearCache();

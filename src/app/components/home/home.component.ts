@@ -86,8 +86,6 @@ export class HomeComponent implements OnInit {
   }
 
   chooseCategory(category: Category) {
-    console.log(category);
-
     this.cacheService.cacheCategory(category);
     this.router.navigateByUrl('/play');
   }

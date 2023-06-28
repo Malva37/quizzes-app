@@ -19,16 +19,20 @@
           {{ currentQuestionIndex + 1 }} / 10
         </mat-card-actions>
         <mat-card-header class="text-center">
-          <mat-card-subtitle>
-            {{ currentQuiz.questions[currentQuestionIndex].question }}
+          <mat-card-subtitle [innerHTML]='currentQuiz.questions[currentQuestionIndex].question'>
+
           </mat-card-subtitle>
         </mat-card-header>
         <form [formGroup]="quizForm" class="text-center margin">
-          <mat-radio-group formControlName="answer">
+          <mat-radio-group formControlName="answer" >
             <mat-radio-button value="True">Yes</mat-radio-button>
             <mat-radio-button value="False">No</mat-radio-button>
           </mat-radio-group>
         </form>
+        <!-- <mat-radio-group [formControl]="answer" >
+          <mat-radio-button value="True">Yes</mat-radio-button>
+          <mat-radio-button value="False">No</mat-radio-button>
+        </mat-radio-group> -->
           <mat-card-actions class="end">
 
             <ng-container *ngIf="isLastQuestion">

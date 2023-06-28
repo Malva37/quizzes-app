@@ -1,10 +1,18 @@
 <!-- <mat-toolbar color="primary" *ngIf="headerService.isHeaderEnabled()"> -->
-<mat-toolbar color="primary">
+  <ng-container *ngIf="headerService.isHeaderEnabled()">
+    <mat-toolbar color="primary">
+      <a class="first-link link" routerLinkActive="active" [class.active]="isActiveRoute('/')" routerLink="/">Home</a>
+        <span class="spacer"></span>
+      <a class="link" routerLinkActive="active" (click)="showNotification()" routerLink="/play">Play</a>
+      <a class="link" routerLinkActive="active" routerLink="/finish">Finish</a>
+    </mat-toolbar>
+  </ng-container>
+<!-- <mat-toolbar color="primary">
   <a class="first-link link" routerLinkActive="active" [class.active]="isActiveRoute('/')" routerLink="/">Home</a>
     <span class="spacer"></span>
   <a class="link" routerLinkActive="active" (click)="showNotification()" routerLink="/play">Play</a>
   <a class="link" routerLinkActive="active" routerLink="/finish">Finish</a>
-</mat-toolbar>
+</mat-toolbar> -->
 
 <router-outlet></router-outlet>
 
