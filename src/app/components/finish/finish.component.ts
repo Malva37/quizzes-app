@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { convertTime } from 'src/app/helper/convertTime';
 import { UserStatisticService } from 'src/app/services/user-statistic.service';
 import { UserStatisticLastQuiz } from 'src/app/types/UserStatisticLastQuiz';
@@ -21,6 +22,7 @@ export class FinishComponent implements OnInit {
 
  constructor(
   public statisticService: UserStatisticService,
+  private router: Router,
  ) {}
 
   ngOnInit(): void {
@@ -51,5 +53,9 @@ export class FinishComponent implements OnInit {
   calculatePercentage() {
     const percentage = (this.results.numberOfCorrectAnswer / this.results.numberOfQuestion) * 100;
     return `${percentage.toFixed(2)}%`;
+  }
+  
+  navigateHome() {
+    this.router.navigateByUrl('/home');
   }
 }

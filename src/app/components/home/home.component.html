@@ -1,60 +1,66 @@
-<div class="end">
-  <button mat-raised-button (click)="random()">I'm lucky</button>
-</div>
+<main class="content">
+  <div class="end">
+    <button mat-raised-button (click)="random()">I'm lucky</button>
+  </div>
 
-<section class="example-container mat-elevation-z8" tabindex="0">
-  <table mat-table [dataSource]="dataSource">
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let category"> {{category.name}} </td>
-    </ng-container>
+  <section class="table-container mat-elevation-z8" tabindex="0">
+    <table mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let category"> {{category.name}} </td>
+      </ng-container>
 
-    <ng-container matColumnDef="numberOfQuestions">
-      <th mat-header-cell *matHeaderCellDef> Number of questions </th>
-      <td mat-cell *matCellDef="let category"> 10 </td>
-    </ng-container>
+      <ng-container matColumnDef="numberOfQuestions">
+        <th mat-header-cell *matHeaderCellDef> Number of questions </th>
+        <td mat-cell *matCellDef="let category"> 10 </td>
+      </ng-container>
 
-    <ng-container matColumnDef="play">
-      <th mat-header-cell *matHeaderCellDef>Play</th>
-      <td mat-cell *matCellDef="let category" class="button-cell">
-        <button mat-icon-button (click)="chooseCategory(category)" [disabled]="category.passed">
-          <mat-icon>play_circle_outline</mat-icon>
-        </button>
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="play">
+        <th mat-header-cell *matHeaderCellDef>Play</th>
+        <td mat-cell *matCellDef="let category" class="button-cell">
+          <button mat-icon-button (click)="chooseCategory(category)" [disabled]="category.passed">
+            <mat-icon>play_circle_outline</mat-icon>
+          </button>
+        </td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
 
-  <mat-paginator [pageSizeOptions]="[5, 10]" aria-label="Select page of users"></mat-paginator>
-</section>
+    <mat-paginator [pageSizeOptions]="[5, 10]" aria-label="Select page of users"></mat-paginator>
+  </section>
 
-<ng-container *ngIf="isPassedQuiz">
-  <mat-card class="margin">
-    <mat-card-header class="text-center">
-      <mat-card-title>
-        Your total results:
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <div class="statistic-item">
-        <span class="statistic-label">Number of passed quizzes: </span>
-        <span class="statistic-value">{{ results.passedQuizzes.length }}</span>
-      </div>
-      <div class="statistic-item">
-        <span class="statistic-label">Number of Correct Answers:</span>
-        <span class="statistic-value">{{ results.numberOfCorrectAnswer }} / {{ results.numberOfQuestion }} </span>
-      </div>
-      <div class="statistic-item">
-        <span class="statistic-label">Time of Answering:</span>
-        <span class="statistic-value">{{ timeToDisplay }}</span>
-      </div>
-      <div class="statistic-item">
-        <span class="statistic-label">Percentage of Correct Answers:</span>
-        <span class="statistic-value">{{ calculatePercentage() }}</span>
-      </div>
-    </mat-card-content>
-  </mat-card>
-</ng-container>
+  <ng-container *ngIf="isPassedQuiz">
+    <div class="flex">
+      <mat-card class="margin card">
+        <mat-card-header class="text-center">
+          <mat-card-title>
+            Your total results:
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="statistic-item">
+            <span class="statistic-label">Number of passed quizzes: </span>
+            <span class="statistic-value">{{ results.passedQuizzes.length }}</span>
+          </div>
+          <div class="statistic-item">
+            <span class="statistic-label">Number of Correct Answers:</span>
+            <span class="statistic-value">{{ results.numberOfCorrectAnswer }} / {{ results.numberOfQuestion }} </span>
+          </div>
+          <div class="statistic-item">
+            <span class="statistic-label">Time of Answering:</span>
+            <span class="statistic-value">{{ timeToDisplay }}</span>
+          </div>
+          <div class="statistic-item">
+            <span class="statistic-label">Percentage of Correct Answers:</span>
+            <span class="statistic-value">{{ calculatePercentage() }}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
 
+  </ng-container>
+
+
+</main>

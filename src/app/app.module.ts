@@ -12,22 +12,14 @@ import { PlayComponent } from './components/play/play.component';
 import { FinishComponent } from './components/finish/finish.component';
 import { QuizGuard } from './guadrs/quiz.guard';
 
-// import { MatToolbarModule } from '@angular/material/toolbar';
-// import { MatButtonModule } from '@angular/material/button';
-// import { MatSnackBarModule } from '@angular/material/snack-bar';
-// import { MatIconModule } from '@angular/material/icon';
-// import { MatPaginatorModule } from '@angular/material/paginator';
-// import { MatTableModule } from '@angular/material/table';
-
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
-import {MatRadioModule} from '@angular/material/radio';
-import {MatCardModule} from '@angular/material/card';
-
+import { MatRadioModule } from '@angular/material/radio';
+import { MatCardModule } from '@angular/material/card';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },

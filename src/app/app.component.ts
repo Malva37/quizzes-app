@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { HeaderService } from './services/header.service';
 import { CategoryStoreService } from './services/quiz-store.service';
 
 @Component({
@@ -10,6 +11,7 @@ import { CategoryStoreService } from './services/quiz-store.service';
 })
 export class AppComponent {
   constructor(
+    // public headerService: HeaderService,
     private _snackBar: MatSnackBar,
     public quizFromStorageService: CategoryStoreService,
     private router: Router

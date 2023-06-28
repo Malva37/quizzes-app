@@ -2,3 +2,53 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.content {
+  padding: 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  // align-items: center;
+}
+
+.first-link {
+  margin-left: 10px;
+}
+.link {
+  color: #fff;
+  font-size: 16px;
+  text-decoration: none;
+  padding: 5px 10px;
+  display: inline-block;
+}
+
+.active {
+  border: #ffffff 1px solid;
+  border-radius: 7%;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  white-space: nowrap;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.flex {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 2%;
+}
+
+.card {
+  width: 100%;
+  max-width: 700px;
+}
+
+

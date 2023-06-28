@@ -1,3 +1,4 @@
+<!-- <mat-toolbar color="primary" *ngIf="headerService.isHeaderEnabled()"> -->
 <mat-toolbar color="primary">
   <a class="first-link link" routerLinkActive="active" [class.active]="isActiveRoute('/')" routerLink="/">Home</a>
     <span class="spacer"></span>
@@ -5,6 +6,5 @@
   <a class="link" routerLinkActive="active" routerLink="/finish">Finish</a>
 </mat-toolbar>
 
-<main class="content">
-  <router-outlet></router-outlet>
-</main>
+<router-outlet></router-outlet>
+

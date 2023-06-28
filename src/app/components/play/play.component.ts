@@ -8,6 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserStatisticService } from 'src/app/services/user-statistic.service';
 import { convertTime } from 'src/app/helper/convertTime';
 import { UserStatisticLastQuiz } from 'src/app/types/UserStatisticLastQuiz';
+import { HeaderService } from 'src/app/services/header.service';
 
 @Component({
   selector: 'app-play',
@@ -36,20 +37,22 @@ export class PlayComponent implements OnInit {
   };
 
   constructor(
+    // public headerService: HeaderService,
     public quizzesFromServerService: QuizzesService,
-    public cacheService: CategoryStoreService,
+    public categoryService: CategoryStoreService,
     public statisticService: UserStatisticService,
     private router: Router,
     private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
+    // this.headerService.setHeaderEnabled(false);
     this.startTimer();
-    this.getCurrentQuiz();
-    this.fillCurrentQuiz();
     this.quizForm = this.fb.group({
       answer: [null, Validators.required],
     });
+    this.fillCurrentQuiz();
+    this.getCurrentQuiz();
   }
 
   startTimer() {
@@ -60,7 +63,7 @@ export class PlayComponent implements OnInit {
   }
 
   fillCurrentQuiz() {
-    const quizFromStorage = this.cacheService.getCategory();
+    const quizFromStorage = this.categoryService.getCategory();
     console.log(quizFromStorage);
 
     if (quizFromStorage) {
@@ -84,7 +87,7 @@ export class PlayComponent implements OnInit {
   }
 
   cancel() {
-    this.cacheService.clearCache();
+    this.categoryService.clearCache();
     this.userResult = {
       categoryId: 0,
       categoryName: '',
@@ -93,8 +96,10 @@ export class PlayComponent implements OnInit {
       timeOfAnswering: 0,
     };
     clearInterval(this.timerId);
+    // this.headerService.setHeaderEnabled(true);
     this.router.navigateByUrl('/home');
   }
+
 
   nextQuestion() {
     if (this.quizForm.valid) {
@@ -110,7 +115,7 @@ export class PlayComponent implements OnInit {
   }
 
   finishQuiz() {
-    if (this.quizForm.valid) {
+    // if (this.quizForm.valid) {
       this.currentQuiz.questions[this.currentQuestionIndex].userAnswer =
         this.quizForm.value.answer;
       clearInterval(this.timerId);
@@ -118,8 +123,10 @@ export class PlayComponent implements OnInit {
       this.calculateResults();
       this.statisticService.cacheStatisticTotal(this.userResult);
       this.statisticService.cacheStatisticLast(this.userResult);
+      // this.headerService.setHeaderEnabled(true);
       this.router.navigateByUrl('/finish');
-    }
+    // }
+    this.categoryService.clearCache();
   }
 
   calculateResults() {
