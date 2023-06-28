@@ -1,5 +1,20 @@
 .end {
   display: flex;
   justify-content: end;
+}
+
+.flex {
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 2%;
 }
+
+.text-center {
+  text-align: center;
+}
+
+.margin {
+  margin: 10px;
+}
+
+

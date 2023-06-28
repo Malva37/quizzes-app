@@ -3,11 +3,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CategoryStoreService } from 'src/app/services/quiz-store.service';
 import { QuizzesService } from 'src/app/services/quizzes.service';
-import { Question } from 'src/app/types/Question';
 import { Quiz } from 'src/app/types/Quiz';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserStatisticService } from 'src/app/services/user-statistic.service';
-import { UserStatistic } from 'src/app/types/UserStatistic';
+import { convertTime } from 'src/app/helper/convertTime';
+import { UserStatisticLastQuiz } from 'src/app/types/UserStatisticLastQuiz';
 
 @Component({
   selector: 'app-play',
@@ -16,7 +16,9 @@ import { UserStatistic } from 'src/app/types/UserStatistic';
 })
 export class PlayComponent implements OnInit {
   isLastQuestion: boolean = false;
-
+  timer: number = 0;
+  timerId!: ReturnType<typeof setInterval>;
+  timerDisplay: string = '';
   quizForm!: FormGroup;
   currentQuestionIndex: number = 0;
   currentQuiz: Quiz = {
@@ -25,8 +27,9 @@ export class PlayComponent implements OnInit {
     questions: [],
   };
 
-  userResult: UserStatistic = {
-    numberOfQuizzes: 0,
+  userResult: UserStatisticLastQuiz = {
+    categoryId: 0,
+    categoryName: '',
     numberOfCorrectAnswer: 0,
     numberOfQuestion: 0,
     timeOfAnswering: 0,
@@ -37,15 +40,23 @@ export class PlayComponent implements OnInit {
     public cacheService: CategoryStoreService,
     public statisticService: UserStatisticService,
     private router: Router,
-    private fb: FormBuilder,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
+    this.startTimer();
     this.getCurrentQuiz();
     this.fillCurrentQuiz();
     this.quizForm = this.fb.group({
-      answer: [null, Validators.required]
+      answer: [null, Validators.required],
     });
+  }
+
+  startTimer() {
+    this.timerId = setInterval(() => {
+      this.timer++;
+      this.timerDisplay = convertTime(this.timer);
+    }, 1000);
   }
 
   fillCurrentQuiz() {
@@ -59,93 +70,70 @@ export class PlayComponent implements OnInit {
   }
 
   getCurrentQuiz() {
-    this.quizzesFromServerService.getOneQuiz().subscribe(
-      (data) => {
-      console.log(data);
-
-
+    this.quizzesFromServerService.getOneQuiz().subscribe((data) => {
       this.currentQuiz.questions = this.normalize(data.results);
     });
-    console.log(this.currentQuiz);
-
   }
 
-  normalize (data: QuestionResponse[]) {
-    console.log(data);
-
-    return data.map(item => ({
+  normalize(data: QuestionResponse[]) {
+    return data.map((item) => ({
       question: item.question,
       correctAnswer: item.correct_answer,
       userAnswer: null,
-    }))
+    }));
   }
 
   cancel() {
     this.cacheService.clearCache();
     this.userResult = {
-      numberOfQuizzes: 0,
+      categoryId: 0,
+      categoryName: '',
       numberOfCorrectAnswer: 0,
       numberOfQuestion: 0,
       timeOfAnswering: 0,
-    }
+    };
+    clearInterval(this.timerId);
     this.router.navigateByUrl('/home');
   }
 
   nextQuestion() {
     if (this.quizForm.valid) {
-      this.currentQuiz.questions[this.currentQuestionIndex].userAnswer = this.quizForm.value.answer;
+      this.currentQuiz.questions[this.currentQuestionIndex].userAnswer =
+        this.quizForm.value.answer;
       this.quizForm.reset();
       this.currentQuestionIndex++;
 
       if (this.currentQuestionIndex === this.currentQuiz.questions.length - 1) {
-      this.isLastQuestion = true;
+        this.isLastQuestion = true;
       }
-      console.log(this.currentQuestionIndex);
     }
-
-    // if (this.isLastQuestion()) {
-    //   this.currentQuiz.questions[this.currentQuestionIndex].userAnswer = this.quizForm.value.answer;
-    //   this.calculateResults();
-
-    //   this.statisticService.cacheStatistic(this.userResult)
-    // }
   }
 
   finishQuiz() {
     if (this.quizForm.valid) {
-      this.currentQuiz.questions[this.currentQuestionIndex].userAnswer = this.quizForm.value.answer;
+      this.currentQuiz.questions[this.currentQuestionIndex].userAnswer =
+        this.quizForm.value.answer;
+      clearInterval(this.timerId);
       this.quizForm.reset();
       this.calculateResults();
-
-      this.statisticService.cacheStatistic(this.userResult);
+      this.statisticService.cacheStatisticTotal(this.userResult);
+      this.statisticService.cacheStatisticLast(this.userResult);
       this.router.navigateByUrl('/finish');
+    }
   }
-
-  }
-
-
-  // isLastQuestion() {
-  //   console.log(this.currentQuestionIndex, 'his.currentQuestionIndex');
-  //   console.log(this.currentQuiz.questions.length);
-
-
-  //   return this.currentQuestionIndex === this.currentQuiz.questions.length - 1;
-  // }
 
   calculateResults() {
-    const numberOfCorrectAnswer = this.currentQuiz.questions.filter(question => question.correctAnswer === question.userAnswer);
-    const timeOfAnswering =100;
-    console.log(this.currentQuiz.questions, 'this.currentQuiz.questions');
-    console.log(numberOfCorrectAnswer);
-
-
+    const numberOfCorrectAnswer = this.currentQuiz.questions.filter(
+      (question) => question.correctAnswer === question.userAnswer
+    );
+    const timeOfAnswering = this.timer;
 
     this.userResult = {
+      categoryId: this.currentQuiz.categoryId,
+      categoryName: this.currentQuiz.categoryName,
       numberOfCorrectAnswer: numberOfCorrectAnswer.length,
-      numberOfQuizzes: 1,
       numberOfQuestion: this.currentQuiz.questions.length,
-      timeOfAnswering
+      timeOfAnswering,
     };
   }
-
 }

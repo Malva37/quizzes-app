@@ -1,21 +1,33 @@
-<div class="end">
-  <button mat-raised-button (click)="cancel()">Cancel quiz</button>
-</div>
-
-<h1>{{ currentQuiz.categoryName }}</h1>
-
 <ng-container *ngIf="currentQuiz.questions.length > 0">
+  <h2 class="text-center margin">
+    {{ currentQuiz.categoryName }}
+  </h2>
+
+  <div class="flex">
+    <div>
+      Timer: {{ timerDisplay }}
+    </div>
+    
+    <button mat-raised-button (click)="cancel()">
+      Cancel quiz
+    </button>
+  </div>
   <mat-card>
-    <mat-card-header>
-      <mat-card-title>{{ currentQuiz.questions[currentQuestionIndex].question }}</mat-card-title>
+    <mat-card-actions class="end">
+      {{ currentQuestionIndex + 1 }} / 10
+    </mat-card-actions>
+    <mat-card-header class="text-center">
+      <mat-card-subtitle>
+        {{ currentQuiz.questions[currentQuestionIndex].question }}
+      </mat-card-subtitle>
     </mat-card-header>
-    <form [formGroup]="quizForm">
+    <form [formGroup]="quizForm" class="text-center margin">
       <mat-radio-group formControlName="answer">
         <mat-radio-button value="True">Yes</mat-radio-button>
         <mat-radio-button value="False">No</mat-radio-button>
       </mat-radio-group>
+    </form>
       <mat-card-actions class="end">
-
 
         <ng-container *ngIf="isLastQuestion">
           <button mat-button color="primary" (click)="finishQuiz()" [disabled]="quizForm.invalid">
@@ -23,18 +35,21 @@
           </button>
         </ng-container>
 
-
         <ng-container *ngIf="!isLastQuestion">
           <button mat-button color="primary" (click)="nextQuestion()" [disabled]="quizForm.invalid">
             Next
           </button>
         </ng-container>
 
-
-        <!-- <button mat-button color="primary" (click)="nextQuestion()" [disabled]="quizForm.invalid">
-          {{ isLastQuestion() ? 'Finish' : 'Next' }}
-        </button> -->
       </mat-card-actions>
-    </form>
+
   </mat-card>
+
+</ng-container>
+
+<ng-container *ngIf="!currentQuiz.questions.length">
+  <h2 class="text-center margin">
+    In the category {{ currentQuiz.categoryName }}, there are no available questions. Please choose
+    <a href="/home" (click)="cancel()">another</a> quiz.
+  </h2>
 </ng-container>

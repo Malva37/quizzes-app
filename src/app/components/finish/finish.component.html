@@ -1,1 +1,43 @@
-<p>finish works!</p>
+<ng-container *ngIf="!isPassedQuiz">
+  <button mat-button color="primary">
+    You have never played before
+    <a class="link" routerLinkActive="active" routerLink="/">
+      Let's play!
+    </a>
+  </button>
+</ng-container>
+
+<ng-container *ngIf="isPassedQuiz">
+  <mat-card>
+    <mat-card-header>
+      <h2>
+        Your last quiz results
+      </h2>
+  </mat-card-header>
+    <mat-card-content>
+      <div class="statistic-item">
+        <span class="statistic-label">Category:</span>
+        <span class="statistic-value">{{ results.categoryName }}</span>
+      </div>
+      <div class="statistic-item">
+        <span class="statistic-label">Number of Correct Answers:</span>
+        <span class="statistic-value">{{ results.numberOfCorrectAnswer }}</span>
+      </div>
+      <div class="statistic-item">
+        <span class="statistic-label">Number of Questions:</span>
+        <span class="statistic-value">{{ results.numberOfQuestion }}</span>
+      </div>
+      <div class="statistic-item">
+        <span class="statistic-label">Time of Answering:</span>
+        <span class="statistic-value">{{ timeToDisplay }}</span>
+      </div>
+      <div class="statistic-item">
+        <span class="statistic-label">Percentage of Correct Answers:</span>
+        <span class="statistic-value">{{ calculatePercentage() }}</span>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</ng-container>
+
+
+

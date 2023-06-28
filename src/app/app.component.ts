@@ -24,13 +24,6 @@ export class AppComponent {
   }
 
   showNotification() {
-    // const isLoggedIn = JSON.parse(
-    //   localStorage.getItem('currentQuiz') || 'false'
-    // );
-    // if (!isLoggedIn) {
-    //   this.openSnackBar("Let's choose a quiz", "x");
-    // }
-    // return;
     const isCurrentQuiz = this.quizFromStorageService.getCategory();
 
     if (!isCurrentQuiz) {

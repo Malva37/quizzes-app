@@ -1,5 +1,6 @@
-export interface UserStatistic {
-  passedQuizzes: number[];
+export interface UserStatisticLastQuiz {
+  categoryId: number;
+  categoryName: string;
   numberOfCorrectAnswer: number;
   numberOfQuestion: number;
   timeOfAnswering: number;

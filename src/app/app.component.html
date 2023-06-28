@@ -1,9 +1,8 @@
 <mat-toolbar color="primary">
-  <a class="first-link" routerLinkActive="active" [class.active]="isActiveRoute('/')" mat-button
-    routerLink="/">Home</a>
+  <a class="first-link link" routerLinkActive="active" [class.active]="isActiveRoute('/')" routerLink="/">Home</a>
     <span class="spacer"></span>
-  <a mat-button routerLinkActive="active" (click)="showNotification()" routerLink="/play">Play</a>
-  <a mat-button routerLinkActive="active" routerLink="/finish">Finish</a>
+  <a class="link" routerLinkActive="active" (click)="showNotification()" routerLink="/play">Play</a>
+  <a class="link" routerLinkActive="active" routerLink="/finish">Finish</a>
 </mat-toolbar>
 
 <main class="content">
