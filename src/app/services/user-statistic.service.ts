@@ -1,7 +1,6 @@
 import { UserStatisticLastQuiz } from './../types/UserStatisticLastQuiz';
 import { Injectable } from '@angular/core';
-import { convertTime } from '../helper/convertTime';
-import { UserStatistic } from '../types/UserStatistic';
+import { UserStatisticTotal } from '../types/UserStatisticTotal';
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +22,7 @@ export class UserStatisticService {
       return;
     }
 
-    const finishData: UserStatistic = {
+    const finishData: UserStatisticTotal = {
       passedQuizzes: [...cachedData.passedQuizzes, newData.categoryId],
       numberOfQuestion: cachedData.numberOfQuestion + newData.numberOfQuestion,
       numberOfCorrectAnswer:
@@ -39,7 +38,7 @@ export class UserStatisticService {
     localStorage.setItem(this.cacheLastResult, JSON.stringify(newData));
   }
 
-  getStatisticTotal(): UserStatistic {
+  getStatisticTotal(): UserStatisticTotal {
     const cachedData = localStorage.getItem(this.cacheTotalResult);
     return cachedData ? JSON.parse(cachedData) : null;
   }

@@ -13,9 +13,6 @@ export class QuizGuard implements CanActivate {
 
   canActivate(): boolean | UrlTree {
     const condition = this.cacheService.getCategory();
-
-    // or you last quiz is the same what had already done
-
     if (condition) {
       if (condition.passed) {
         return this.router.parseUrl('/');

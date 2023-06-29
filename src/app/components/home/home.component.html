@@ -1,6 +1,6 @@
 <main class="content">
   <div class="end">
-    <button mat-raised-button (click)="random()">I'm lucky</button>
+    <button color="primary" mat-raised-button (click)="random()">I'm lucky</button>
   </div>
 
   <section class="table-container mat-elevation-z8" tabindex="0">
@@ -28,7 +28,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 
-    <mat-paginator [pageSizeOptions]="[5, 10]" aria-label="Select page of users"></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[5, 10]" aria-label="Select page of quizzes"></mat-paginator>
   </section>
 
   <ng-container *ngIf="isPassedQuiz">
@@ -42,11 +42,11 @@
         <mat-card-content>
           <div class="statistic-item">
             <span class="statistic-label">Number of passed quizzes: </span>
-            <span class="statistic-value">{{ results.passedQuizzes.length }}</span>
+            <span class="statistic-value">{{ result.passedQuizzes.length }}</span>
           </div>
           <div class="statistic-item">
             <span class="statistic-label">Number of Correct Answers:</span>
-            <span class="statistic-value">{{ results.numberOfCorrectAnswer }} / {{ results.numberOfQuestion }} </span>
+            <span class="statistic-value">{{ result.numberOfCorrectAnswer }} / {{ result.numberOfQuestion }} </span>
           </div>
           <div class="statistic-item">
             <span class="statistic-label">Time of Answering:</span>

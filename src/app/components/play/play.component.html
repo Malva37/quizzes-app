@@ -9,7 +9,7 @@
         Timer: {{ timerDisplay }}
       </div>
 
-      <button mat-raised-button (click)="cancel()">
+      <button color="primary" mat-raised-button (click)="cancel()">
         Cancel quiz
       </button>
     </div>
@@ -18,23 +18,20 @@
         <mat-card-actions class="end">
           {{ currentQuestionIndex + 1 }} / 10
         </mat-card-actions>
+
         <mat-card-header class="text-center">
           <mat-card-subtitle [innerHTML]='currentQuiz.questions[currentQuestionIndex].question'>
-
           </mat-card-subtitle>
         </mat-card-header>
-        <form [formGroup]="quizForm" class="text-center margin">
+
+        <form [formGroup]="quizForm" class="text-center margin"> <!-- all imports are correct -->
           <mat-radio-group formControlName="answer" >
             <mat-radio-button value="True">Yes</mat-radio-button>
             <mat-radio-button value="False">No</mat-radio-button>
           </mat-radio-group>
         </form>
-        <!-- <mat-radio-group [formControl]="answer" >
-          <mat-radio-button value="True">Yes</mat-radio-button>
-          <mat-radio-button value="False">No</mat-radio-button>
-        </mat-radio-group> -->
-          <mat-card-actions class="end">
 
+          <mat-card-actions class="end">
             <ng-container *ngIf="isLastQuestion">
               <button mat-button color="primary" (click)="finishQuiz()" [disabled]="quizForm.invalid">
                 Finish
@@ -46,9 +43,7 @@
                 Next
               </button>
             </ng-container>
-
           </mat-card-actions>
-
       </mat-card>
     </div>
   </ng-container>

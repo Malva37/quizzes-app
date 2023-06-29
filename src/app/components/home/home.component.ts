@@ -1,14 +1,13 @@
-import { Quiz } from './../../types/Quiz';
 import { MatPaginator } from '@angular/material/paginator';
 import { CategoryStoreService } from './../../services/quiz-store.service';
 import { QuizzesService } from './../../services/quizzes.service';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Category } from 'src/app/types/Category';
 import { Router } from '@angular/router';
 import { UserStatisticService } from 'src/app/services/user-statistic.service';
 import { CategoryResponse } from 'src/app/types/CategoryResponse';
-import { UserStatistic } from 'src/app/types/UserStatistic';
+import { UserStatisticTotal } from 'src/app/types/UserStatisticTotal';
 import { convertTime } from 'src/app/helper/convertTime';
 
 @Component({
@@ -18,17 +17,17 @@ import { convertTime } from 'src/app/helper/convertTime';
 })
 export class HomeComponent implements OnInit {
   isPassedQuiz: boolean = false;
-  timeToDisplay: string = '0:00:00';
-  results: UserStatistic = {
+  timeToDisplay: string = '';
+  result: UserStatisticTotal = {
     passedQuizzes: [],
     numberOfCorrectAnswer: 0,
     numberOfQuestion: 0,
     timeOfAnswering: 0,
-  }
+  };
   dataSource!: MatTableDataSource<Category>;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-
   displayedColumns = ['name', 'numberOfQuestions', 'play'];
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
     public quizzesFromServerService: QuizzesService,
@@ -41,43 +40,39 @@ export class HomeComponent implements OnInit {
     this.fillResults();
     this.quizzesFromServerService.categories$.subscribe(
       (data: CategoryResponse[]) => {
-        const  categories = this.normalize(data)
-
+        const categories = this.normalize(data);
         this.dataSource = new MatTableDataSource(this.normalize(categories));
         this.dataSource.paginator = this.paginator;
       }
     );
   }
 
-
   fillResults() {
     const cachedData = this.statisticService.getStatisticTotal();
-
     if (!cachedData) {
       this.isPassedQuiz = false;
       return;
     }
 
     this.isPassedQuiz = true;
-
-    this.results = {
+    this.result = {
       passedQuizzes: cachedData.passedQuizzes,
       numberOfCorrectAnswer: cachedData.numberOfCorrectAnswer,
       numberOfQuestion: cachedData.numberOfQuestion,
       timeOfAnswering: cachedData.timeOfAnswering,
     };
 
-    this.timeToDisplay = convertTime(this.results.timeOfAnswering);
+    this.timeToDisplay = convertTime(this.result.timeOfAnswering);
   }
+
   normalize(data: CategoryResponse[]): Category[] {
     const cachedData = this.statisticService.getStatisticTotal();
     let passedQuizzesId: number[] = [];
-
-    if(cachedData) {
+    if (cachedData) {
       passedQuizzesId = cachedData.passedQuizzes;
     }
 
-    const categories: Category[] = data.map(item => ({
+    const categories: Category[] = data.map((item) => ({
       ...item,
       passed: passedQuizzesId.includes(item.id),
     }));
@@ -91,14 +86,20 @@ export class HomeComponent implements OnInit {
   }
 
   random() {
-    const randomQuiz =  this.dataSource.data[Math.floor(this.dataSource.data.length * Math.random())];
+    const randomQuiz =
+      this.dataSource.data[
+        Math.floor(this.dataSource.data.length * Math.random())
+      ];
 
     this.cacheService.cacheCategory(randomQuiz);
     this.router.navigateByUrl('/play');
   }
 
   calculatePercentage() {
-    const percentage = (this.results.numberOfCorrectAnswer / this.results.numberOfQuestion) * 100;
+    const percentage =
+      (this.result.numberOfCorrectAnswer / this.result.numberOfQuestion) *
+      100;
+      
     return `${percentage.toFixed(2)}%`;
   }
 }

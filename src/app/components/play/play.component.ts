@@ -1,5 +1,5 @@
 import { QuestionResponse } from './../../types/QuestionResponse';
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CategoryStoreService } from 'src/app/services/quiz-store.service';
 import { QuizzesService } from 'src/app/services/quizzes.service';
@@ -27,8 +27,7 @@ export class PlayComponent implements OnInit {
     categoryName: '',
     questions: [],
   };
-
-  userResult: UserStatisticLastQuiz = {
+  currentResult: UserStatisticLastQuiz = {
     categoryId: 0,
     categoryName: '',
     numberOfCorrectAnswer: 0,
@@ -44,16 +43,11 @@ export class PlayComponent implements OnInit {
     public statisticService: UserStatisticService,
     private router: Router,
     private fb: FormBuilder
-  ) {
-  //   this.quizForm = this.fb.group({
-  //   answer: [null], // Default value is null
-  // });
-}
+  ) {}
 
   ngOnInit(): void {
     this.quizForm = this.fb.group({
       answer: [null, Validators.required],
-      // answer: new FormControl('')
     });
     this.fillCurrentQuiz();
     this.getCurrentQuiz();
@@ -97,7 +91,7 @@ export class PlayComponent implements OnInit {
 
   cancel() {
     this.categoryService.clearCache();
-    this.userResult = {
+    this.currentResult = {
       categoryId: 0,
       categoryName: '',
       numberOfCorrectAnswer: 0,
@@ -108,7 +102,6 @@ export class PlayComponent implements OnInit {
     this.headerService.setHeaderEnabled(true);
     this.router.navigateByUrl('/home');
   }
-
 
   nextQuestion() {
     if (this.quizForm.valid) {
@@ -124,17 +117,15 @@ export class PlayComponent implements OnInit {
   }
 
   finishQuiz() {
-    // if (this.quizForm.valid) {
-      this.currentQuiz.questions[this.currentQuestionIndex].userAnswer =
-        this.quizForm.value.answer;
-      clearInterval(this.timerId);
-      this.quizForm.reset();
-      this.calculateResults();
-      this.statisticService.cacheStatisticTotal(this.userResult);
-      this.statisticService.cacheStatisticLast(this.userResult);
-      this.headerService.setHeaderEnabled(true);
-      this.router.navigateByUrl('/finish');
-    // }
+    this.currentQuiz.questions[this.currentQuestionIndex].userAnswer =
+      this.quizForm.value.answer;
+    clearInterval(this.timerId);
+    this.quizForm.reset();
+    this.calculateResults();
+    this.statisticService.cacheStatisticTotal(this.currentResult);
+    this.statisticService.cacheStatisticLast(this.currentResult);
+    this.headerService.setHeaderEnabled(true);
+    this.router.navigateByUrl('/finish');
     this.categoryService.clearCache();
   }
 
@@ -142,14 +133,13 @@ export class PlayComponent implements OnInit {
     const numberOfCorrectAnswer = this.currentQuiz.questions.filter(
       (question) => question.correctAnswer === question.userAnswer
     );
-    const timeOfAnswering = this.timer;
 
-    this.userResult = {
+    this.currentResult = {
       categoryId: this.currentQuiz.categoryId,
       categoryName: this.currentQuiz.categoryName,
       numberOfCorrectAnswer: numberOfCorrectAnswer.length,
       numberOfQuestion: this.currentQuiz.questions.length,
-      timeOfAnswering,
+      timeOfAnswering: this.timer,
     };
   }
 }
